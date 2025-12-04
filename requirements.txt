@@ -1,0 +1,8 @@
+streamlit
+librosa
+pyworld
+pysptk
+numpy
+scipy
+soundfile
+matplotlib
