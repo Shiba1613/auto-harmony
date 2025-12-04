@@ -6,3 +6,4 @@ numpy
 scipy
 soundfile
 matplotlib
+setuptools
