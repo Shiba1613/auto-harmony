@@ -232,5 +232,19 @@ if uploaded_file is not None:
                     file_name="hamori_mixed.wav",
                     mime="audio/wav"
                 )
+                                
+                buffer = io.BytesIO()
+                sf.write(buffer, y_hamori[:len_min], sr, format='WAV')
+                buffer.seek(0)
+
+                st.audio(buffer, format='audio/wav')
+
+                st.download_button(
+                    label="ハモリのみ音源をダウンロード",
+                    data=buffer,
+                    file_name="hamori_only.wav",
+                    mime="audio/wav"
+                )
+                
             else:
                 st.error("分析に失敗しました。音声が含まれていない可能性があります。")
