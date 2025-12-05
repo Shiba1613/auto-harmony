@@ -166,9 +166,6 @@ st.write("ボーカル音源(wav)をアップロードすると、キーを推�
 
 # サイドバー設定
 st.sidebar.header("設定")
-key_original = st.sidebar.checkbox("固定長分割", value=True)
-smooth_FM = st.sidebar.checkbox("シフト平滑化(またはピッチ平滑化)", value=False)
-precise_f0 = st.sidebar.checkbox("正確なf0", value=False)
 # 上ハモリ or 下ハモリ
 harmo_mode = st.sidebar.radio(
     "ハモリの種類",
@@ -185,6 +182,10 @@ st.sidebar.subheader("詳細設定")
 w_triad = st.sidebar.slider("トライアド重み (W_TRIAD)", 0.0, 1.0, 0.2)
 w_vi = st.sidebar.slider("V-I進行重み (W_VI)", 0.0, 1.0, 0.5)
 warp_coeff = st.sidebar.slider("声質変換 (WARP)", -0.2, 0.2, 0.0)
+
+key_original = st.sidebar.checkbox("固定長分割", value=True)
+smooth_FM = st.sidebar.checkbox("シフト平滑化", value=False)
+precise_f0 = st.sidebar.checkbox("正確なf0", value=False)
 
 uploaded_file = st.file_uploader("WAVファイルをアップロード", type=["wav"])
 
