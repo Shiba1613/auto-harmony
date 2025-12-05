@@ -169,8 +169,6 @@ st.sidebar.header("設定")
 key_original = st.sidebar.checkbox("固定長分割", value=True)
 smooth_FM = st.sidebar.checkbox("シフト平滑化(またはピッチ平滑化)", value=False)
 precise_f0 = st.sidebar.checkbox("正確なf0", value=False)
-
-key_original = st.sidebar.checkbox("固定長分割", value=True)
 # 上ハモリ or 下ハモリ
 harmo_mode = st.sidebar.radio(
     "ハモリの種類",
