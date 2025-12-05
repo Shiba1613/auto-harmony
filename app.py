@@ -107,7 +107,7 @@ def run_full_analysis(x, fs, penta=0.5, precise_f0=False, key_original=True, W_t
 
 
 class HarmoSynthesizer:
-    def __init__(self, sr=48000, shift_up=True, warp_coeff=0.0, num_coeff=64, window_len=5):
+    def __init__(self, sr=48000, shift_up=True, warp_coeff=0.0, num_coeff=64, window_len=5,smooth_FM = False):
         self.sr = sr
         self.frame_period = 5
         self.fftlen = pw.get_cheaptrick_fft_size(self.sr)
@@ -127,12 +127,16 @@ class HarmoSynthesizer:
             self.window = window / np.sum(window)
         else:
             self.window = None
+        self.smooth_FM = smooth_FM
 
     def pitch_coeff(self, f0, N, idx):
         v_ = np.roll(self.pitch_shift, -idx)
         f0_shifted = f0 * v_[N]
         if self.window is not None:
-            f0_shifted = np.convolve(f0_shifted, self.window, 'same')
+            if self.smooth_FM:
+                f0_shifted = f0 * np.convolve(v_[N], self.window, 'same')
+            else:
+                f0_shifted = np.convolve(f0, self.window, 'same')
         return f0_shifted
 
     def freq_warp(self, sp):
@@ -162,6 +166,10 @@ st.write("ボーカル音源(wav)をアップロードすると、キーを推�
 
 # サイドバー設定
 st.sidebar.header("設定")
+key_original = st.sidebar.checkbox("固定長分割", value=True)
+smooth_FM = st.sidebar.checkbox("シフト平滑化(またはピッチ平滑化)", value=False)
+precise_f0 = st.sidebar.checkbox("正確なf0", value=False)
+
 key_original = st.sidebar.checkbox("固定長分割", value=True)
 # 上ハモリ or 下ハモリ
 harmo_mode = st.sidebar.radio(
@@ -195,7 +203,7 @@ if uploaded_file is not None:
             x, f0, sp, ap, detected_key, N, scores = run_full_analysis(
                 x, sr,
                 penta=penta_weight,
-                precise_f0=False, # 高速化のためDio固定
+                precise_f0=precise_f0, # 高速化のためDio固定
                 key_original=key_original,
                 W_triad=w_triad,
                 W_vi=w_vi
@@ -217,7 +225,8 @@ if uploaded_file is not None:
                 harmo = HarmoSynthesizer(
                     sr=sr,
                     shift_up=shift_up,
-                    warp_coeff=warp_coeff
+                    warp_coeff=warp_coeff,
+                    smooth_FM = smooth_FM
                 )
                 y_hamori = harmo.synth(f0, sp, ap, N, detected_key)
 
