@@ -179,8 +179,8 @@ penta_weight = st.sidebar.slider("ペンタトニック重み (PENTA)", 0.0, 1.0
 amp = st.sidebar.slider("ハモリ音量 (AMP)", 0.0, 1.0, 0.5)
 
 st.sidebar.subheader("詳細設定")
-w_triad = st.sidebar.slider("トライアド重み (W_TRIAD)", 0.0, 1.0, 0.2)
-w_vi = st.sidebar.slider("V-I進行重み (W_VI)", 0.0, 1.0, 0.5)
+w_triad = st.sidebar.slider("トライアド重み (W_TRIAD)", 0.0, 1.0, 0.0)
+w_vi = st.sidebar.slider("V-I進行重み (W_VI)", 0.0, 1.0, 0.0)
 warp_coeff = st.sidebar.slider("声質変換 (WARP)", -0.2, 0.2, 0.0)
 
 key_original = st.sidebar.checkbox("固定長分割", value=True)
