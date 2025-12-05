@@ -184,7 +184,6 @@ w_vi = st.sidebar.slider("V-I進行重み (W_VI)", 0.0, 1.0, 0.0)
 warp_coeff = st.sidebar.slider("声質変換 (WARP)", -0.2, 0.2, 0.0)
 
 key_original = st.sidebar.checkbox("固定長分割", value=True)
-smooth_FM = st.sidebar.checkbox("シフト平滑化", value=False)
 precise_f0 = st.sidebar.checkbox("正確なf0", value=False)
 
 uploaded_file = st.file_uploader("WAVファイルをアップロード", type=["wav"])
@@ -225,7 +224,6 @@ if uploaded_file is not None:
                     sr=sr,
                     shift_up=shift_up,
                     warp_coeff=warp_coeff,
-                    smooth_FM = smooth_FM
                 )
                 y_hamori = harmo.synth(f0, sp, ap, N, detected_key)
 
