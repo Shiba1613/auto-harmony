@@ -65,10 +65,13 @@ def run_full_analysis(x, fs, penta=0.5, precise_f0=False, key_original=True, W_t
         normed_f0 = (np.log2(f0_voiced) - np.log2(440) + 1/24) % 1
         v = np.histogram(normed_f0, bins=12, range=(0, 1))[0]
     else:
-        # 簡易実装: 音の変わり目のみ (ここではエラー回避のため全フレーム推奨)
-        normed_f0 = (np.log2(f0_voiced) - np.log2(440) + 1/24) % 1
-        v = np.histogram(normed_f0, bins=12, range=(0, 1))[0]
-
+        def f02tone(f0):
+            return (np.log2(f0+1e-10) - np.log2(440) + 1/24)*12//1
+        N = f02tone(f0)
+        x_ = f0[1:] * ((N[1:] -  N[:-1]) != 0.)* (ap[1:,0] < 0.5)
+        tone = (f02tone(x_[x_!=0]))%12
+        v = np.histogram(tone,bins=12,range=(0,11))[0]
+        
     # 「袋詰め」スコアを計算
     scores_KS = key_mat_KS @ v
     scores_Triad = matrix_Triad @ v
@@ -157,6 +160,7 @@ st.write("ボーカル音源(wav)をアップロードすると、キーを推�
 
 # サイドバー設定
 st.sidebar.header("設定")
+key_original = st.sidebar.checkbox("固定長分割", value=True)
 shift_up = st.sidebar.checkbox("上ハモリ (3度上)", value=True)
 penta_weight = st.sidebar.slider("ペンタトニック重み (PENTA)", 0.0, 1.0, 0.5)
 amp = st.sidebar.slider("ハモリ音量 (AMP)", 0.0, 1.0, 0.5)
@@ -182,7 +186,7 @@ if uploaded_file is not None:
                 x, sr,
                 penta=penta_weight,
                 precise_f0=False, # 高速化のためDio固定
-                key_original=True,
+                key_original=key_original,
                 W_triad=w_triad,
                 W_vi=w_vi
             )
