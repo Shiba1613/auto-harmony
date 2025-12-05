@@ -163,7 +163,15 @@ st.write("ボーカル音源(wav)をアップロードすると、キーを推�
 # サイドバー設定
 st.sidebar.header("設定")
 key_original = st.sidebar.checkbox("固定長分割", value=True)
-shift_up = st.sidebar.checkbox("上ハモリ (3度上)", value=True)
+# 上ハモリ or 下ハモリ
+harmo_mode = st.sidebar.radio(
+    "ハモリの種類",
+    ("上ハモリ (3度上)", "下ハモリ (3度下)"),
+    horizontal=False
+)
+
+shift_up = (harmo_mode == "上ハモリ (3度上)")
+
 penta_weight = st.sidebar.slider("ペンタトニック重み (PENTA)", 0.0, 1.0, 0.5)
 amp = st.sidebar.slider("ハモリ音量 (AMP)", 0.0, 1.0, 0.5)
 
