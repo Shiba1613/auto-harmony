@@ -67,10 +67,12 @@ def run_full_analysis(x, fs, penta=0.5, precise_f0=False, key_original=True, W_t
     else:
         def f02tone(f0):
             return (np.log2(f0+1e-10) - np.log2(440) + 1/24)*12//1
-        N = f02tone(f0)
-        x_ = f0[1:] * ((N[1:] -  N[:-1]) != 0.)* (ap[1:,0] < 0.5)
-        tone = (f02tone(x_[x_!=0]))%12
-        v = np.histogram(tone,bins=12,range=(0,11))[0]
+        def longtone_hist(f0):
+            N = f02tone(f0)
+            x_ = f0[1:] * ((N[1:] -  N[:-1]) != 0.)* (ap[1:,0] < 0.5)
+            tone = (f02tone(x_[x_!=0]))%12
+            return np.histogram(tone,bins=12,range=(0,11))[0]
+        v = longtone_hist(f0)
         
     # 「袋詰め」スコアを計算
     scores_KS = key_mat_KS @ v
