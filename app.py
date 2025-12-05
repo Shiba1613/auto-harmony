@@ -16,6 +16,81 @@ import soundfile as sf
 import io
 import matplotlib.pyplot as plt
 
+#Dicttranslations = {
+    "ja": {
+        "analysis_error_label": "分析エラー:",
+        "title": "🎵 自動ハモリ生成アプリ",
+        "description": "ボーカル音源(wav)をアップロードすると、キーを推定してハモリパートを生成します。",
+        "settings_label": "設定",
+        "harmony_type_label": "ハモリの種類",
+        "harmony_up": "上ハモリ (3度上)",
+        "harmony_down": "下ハモリ (3度下)",
+        "penta_weight": "ペンタトニック重み (PENTA)",
+        "harmony_volume": "ハモリ音量 (AMP)",
+        "advanced_settings": "詳細設定",
+        "triad_weight": "トライアド重み (W_TRIAD)",
+        "vi_weight": "V-I進行重み (W_VI)",
+        "timbre_warp": "声質変換 (WARP)",
+        "fixed_segment": "固定長分割",
+        "accurate_f0": "正確なf0",
+        "upload_label": "WAVファイルをアップロード",
+        "start_generate": "ハモリ生成開始",
+        "processing_msg": "分析合成中... (数秒〜数十秒かかります)",
+        "estimated_key": "推定されたキー",
+        "key_scores": "Key Estimation Scores",
+        "result_label": "生成結果",
+        "download_mixed": "ハモリ付き音源をダウンロード",
+        "download_harmony": "ハモリのみ音源をダウンロード",
+        "error_msg": "分析に失敗しました。音声が含まれていない可能性があります。"
+    },
+    "en": {
+        "analysis_error_label": "Analysis Error:",
+        "title": "🎵 Auto-Harmonizer App",
+        "description": "Upload a vocal source (wav) to estimate the key and generate a harmony part.",
+        "settings_label": "Settings",
+        "harmony_type_label": "Harmony Type",
+        "harmony_up": "Upper Harmony (3rd Up)",
+        "harmony_down": "Lower Harmony (3rd Down)",
+        "penta_weight": "Pentatonic Weight (PENTA)",
+        "harmony_volume": "Harmony Volume (AMP)",
+        "advanced_settings": "Advanced Settings",
+        "triad_weight": "Triad Weight (W_TRIAD)",
+        "vi_weight": "V-I Progression Weight (W_VI)",
+        "timbre_warp": "Timbre Warp (WARP)",
+        "fixed_segment": "Fixed-length Segmentation",
+        "accurate_f0": "Accurate f0 Mode",
+        "upload_label": "Upload WAV File",
+        "start_generate": "Generate Harmony",
+        "processing_msg": "Analyzing and Synthesizing... (this may take a few moments)",
+        "estimated_key": "Estimated Key",
+        "key_scores": "Key Estimation Scores",
+        "result_label": "Generation Results",
+        "download_mixed": "Download Mixed Audio",
+        "download_harmony": "Download Harmony Track Only",
+        "error_msg": "Analysis failed. The audio might not contain voice."
+    }
+}
+
+if 'language' not in st.session_state:
+    st.session_state.language = 'ja'
+
+lang_options = {"日本語": "ja", "English": "en"}
+
+def set_language():
+    selected_display = st.session_state['lang_select_box']
+    st.session_state.language = lang_options[selected_display]
+
+selected_display = next(k for k, v in lang_options.items() if v == st.session_state.language)
+st.sidebar.selectbox(
+    "言語を選択 / Choose Language", 
+    list(lang_options.keys()),
+    index=list(lang_options.keys()).index(selected_display),
+    key='lang_select_box',
+    on_change=set_language
+)
+
+t = translations[st.session_state.language]
+
 # ================================================
 # ロジック部分 (run_full_analysis, HarmoSynthesizer)
 # ================================================
@@ -38,7 +113,7 @@ def run_full_analysis(x, fs, penta=0.5, precise_f0=False, key_original=True, W_t
         f0 = f0 * (ap[:,0] < 0.5) # 無音区間フィルタリング
 
     except Exception as e:
-        st.error(f"分析エラー: {e}")
+        st.error(f"{t["analysis_error_label"]} {e}")
         return None, None, None, None, None, None
 
     # --- 2. キー分析プロファイルの定義 ---
@@ -161,38 +236,38 @@ class HarmoSynthesizer:
 # Streamlit UI 部分
 # ================================================
 
-st.title("🎵 自動ハモリ生成アプリ")
-st.write("ボーカル音源(wav)をアップロードすると、キーを推定してハモリパートを生成します。")
+st.title(t["title"])
+st.write(t["description"])
 
 # サイドバー設定
-st.sidebar.header("設定")
+st.sidebar.header(t["settings_label"])
 # 上ハモリ or 下ハモリ
 harmo_mode = st.sidebar.radio(
-    "ハモリの種類",
-    ("上ハモリ (3度上)", "下ハモリ (3度下)"),
+    t["harmony_type_label"],
+    (t["harmony_up"], t["harmony_down"]),
     horizontal=False
 )
 
-shift_up = (harmo_mode == "上ハモリ (3度上)")
+shift_up = (harmo_mode == t["harmony_up"])
 
-penta_weight = st.sidebar.slider("ペンタトニック重み (PENTA)", 0.0, 1.0, 0.5)
-amp = st.sidebar.slider("ハモリ音量 (AMP)", 0.0, 1.0, 0.5)
+penta_weight = st.sidebar.slider(t["penta_weight"], 0.0, 1.0, 0.5)
+amp = st.sidebar.slider(t["harmony_volume"], 0.0, 1.0, 0.5)
 
-st.sidebar.subheader("詳細設定")
-w_triad = st.sidebar.slider("トライアド重み (W_TRIAD)", 0.0, 1.0, 0.0)
-w_vi = st.sidebar.slider("V-I進行重み (W_VI)", 0.0, 1.0, 0.0)
-warp_coeff = st.sidebar.slider("声質変換 (WARP)", -0.2, 0.2, 0.0)
+st.sidebar.subheader(t["advanced_settings"])
+w_triad = st.sidebar.slider(t["triad_weight"], 0.0, 1.0, 0.0)
+w_vi = st.sidebar.slider(t["vi_weight"], 0.0, 1.0, 0.0)
+warp_coeff = st.sidebar.slider(t["timbre_warp"], -0.2, 0.2, 0.0)
 
-key_original = st.sidebar.checkbox("固定長分割", value=True)
-precise_f0 = st.sidebar.checkbox("正確なf0", value=False)
+key_original = st.sidebar.checkbox(t["fixed_segment"], value=True)
+precise_f0 = st.sidebar.checkbox(t["accurate_f0"], value=False)
 
-uploaded_file = st.file_uploader("WAVファイルをアップロード", type=["wav"])
+uploaded_file = st.file_uploader(t["upload_label"], type=["wav"])
 
 if uploaded_file is not None:
     st.audio(uploaded_file, format='audio/wav')
 
-    if st.button("ハモリ生成開始"):
-        with st.spinner("分析・生成中... (数秒〜数十秒かかります)"):
+    if st.button(t["start_generate"]):
+        with st.spinner(t["processing_msg"]):
             # 1. ファイル読み込み
             # Streamlitのアップロードファイルは直接librosaで読めるが、srを指定する
             x, sr = librosa.load(uploaded_file, sr=48000, dtype=np.float64)
@@ -210,13 +285,13 @@ if uploaded_file is not None:
             if detected_key is not None:
                 key_names_en = ["C", "Db", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"]
                 key_name = key_names_en[detected_key]
-                st.success(f"推定されたキー: **{key_name}**")
+                st.success(f"{t["estimated_key"]}: **{key_name}**")
 
                 # スコアグラフの表示
                 fig, ax = plt.subplots(figsize=(10, 4))
                 ax.bar(key_names_en, scores, color='blue')
                 ax.bar(key_names_en[detected_key], scores[detected_key], color='red')
-                ax.set_title("Key Estimation Scores")
+                ax.set_title(t["key_scores"])
                 st.pyplot(fig)
 
                 # 3. ハモリ合成
@@ -237,7 +312,7 @@ if uploaded_file is not None:
                     y_mixed = y_mixed / max_val
 
                 # 5. 結果表示
-                st.subheader("生成結果")
+                st.subheader(t["result_label"])
 
                 # WAVファイルとして書き出し (メモリ上)
                 buffer = io.BytesIO()
@@ -247,7 +322,7 @@ if uploaded_file is not None:
                 st.audio(buffer, format='audio/wav')
 
                 st.download_button(
-                    label="ハモリ付き音源をダウンロード",
+                    label=t["download_mixed"],
                     data=buffer,
                     file_name="hamori_mixed.wav",
                     mime="audio/wav"
@@ -260,11 +335,12 @@ if uploaded_file is not None:
                 st.audio(buffer, format='audio/wav')
 
                 st.download_button(
-                    label="ハモリのみ音源をダウンロード",
+                    label=t["download_harmony"],
                     data=buffer,
                     file_name="hamori_only.wav",
                     mime="audio/wav"
                 )
                 
             else:
-                st.error("分析に失敗しました。音声が含まれていない可能性があります。")
+                st.error(t["error_msg"])
+
