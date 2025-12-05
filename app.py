@@ -16,7 +16,8 @@ import soundfile as sf
 import io
 import matplotlib.pyplot as plt
 
-#Dicttranslations = {
+#Dict
+translations = {
     "ja": {
         "analysis_error_label": "分析エラー:",
         "title": "🎵 自動ハモリ生成アプリ",
