@@ -118,9 +118,9 @@ def run_full_analysis(x, fs, penta=0.5, precise_f0=False, key_original=True, W_t
         return None, None, None, None, None, None
 
     # --- 2. キー分析プロファイルの定義 ---
-    # KS法プロファイル (Cマイナー風 - 元コード準拠)
-    C_ks = np.array([1, 0, penta, 1, 0, 1, 0, 1, penta, 0, 1, 0])
-    key_mat_KS = np.stack([np.roll(C_ks, i) for i in range(12)])
+    # ペンタトニックスケール
+    C_penta = np.array([1, 0, penta, 1, 0, 1, 0, 1, penta, 0, 1, 0])
+    key_mat_PENTA = np.stack([np.roll(C_penta, i) for i in range(12)])
 
     # トニック・トライアド(主和音)プロファイル
     C_triad = np.array([1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0])
@@ -151,9 +151,9 @@ def run_full_analysis(x, fs, penta=0.5, precise_f0=False, key_original=True, W_t
         v = longtone_hist(f0)
         
     # 「袋詰め」スコアを計算
-    scores_KS = key_mat_KS @ v
+    scores_PENTA = key_mat_PENTA @ v
     scores_Triad = matrix_Triad @ v
-    final_scores = scores_KS + (W_triad * scores_Triad)
+    final_scores = scores_PENTA + (W_triad * scores_Triad)
 
     # --- 4. スコア計算 (V-Iモーション) ---
     vi_scores = np.zeros(12)
