@@ -111,7 +111,7 @@ def run_full_analysis(x, fs, penta=0.5, precise_f0=False, key_original=True, W_t
 
         sp = pw.cheaptrick(x, f0, t, fs)
         ap = pw.d4c(x, f0, t, fs)
-        f0 = f0 * (ap[:,0] < 0.5) # 無音区間フィルタリング
+        # f0 = f0 * (ap[:,0] < 0.5) # 無音区間フィルタリング
 
     except Exception as e:
         st.error(f"{t["analysis_error_label"]} {e}")
