@@ -211,8 +211,8 @@ class HarmoSynthesizer:
         if self.window is not None:
             if self.smooth_FM:
                 f0_shifted = f0 * np.convolve(v_[N], self.window, 'same')
-            else:
-                f0_shifted = np.convolve(f0, self.window, 'same')
+            # else:
+            #     f0_shifted = np.convolve(f0, self.window, 'same')
         return f0_shifted
 
     def freq_warp(self, sp):
