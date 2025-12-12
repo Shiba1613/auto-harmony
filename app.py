@@ -20,7 +20,7 @@ import matplotlib.pyplot as plt
 translations = {
     "ja": {
         "analysis_error_label": "分析エラー:",
-        "title": "🎵 自動ハモリ生成アプリ",
+        "title": "🎵 自動ハモリ生成",
         "description": "ボーカル音源(wav)をアップロードすると、キーを分析してハモリパートを生成します。",
         "settings_label": "設定",
         "harmony_type_label": "ハモリの種類",
@@ -46,7 +46,7 @@ translations = {
     },
     "en": {
         "analysis_error_label": "Analysis Error:",
-        "title": "🎵 Auto-Harmonizer App",
+        "title": "🎵 Vocal Harmony Generator",
         "description": "Upload a vocal source (wav) to analyze the key and generate a vocal harmony.",
         "settings_label": "Settings",
         "harmony_type_label": "Harmony Type",
@@ -59,7 +59,7 @@ translations = {
         "vi_weight": "V-I Progression Weight",
         "timbre_warp": "Timbre Warp",
         "fixed_segment": "Fixed-length Segmentation",
-        "accurate_f0": "Accurate f0 Mode",
+        "accurate_f0": "Accurate F0 Mode",
         "upload_label": "Upload WAV File",
         "start_generate": "Generate Vocal Harmony",
         "processing_msg": "Analyzing and Synthesizing...",
