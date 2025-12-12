@@ -21,7 +21,7 @@ translations = {
     "ja": {
         "analysis_error_label": "分析エラー:",
         "title": "🎵 自動ハモリ生成アプリ",
-        "description": "ボーカル音源(wav)をアップロードすると、キーを推定してハモリパートを生成します。",
+        "description": "ボーカル音源(wav)をアップロードすると、キーを分析してハモリパートを生成します。",
         "settings_label": "設定",
         "harmony_type_label": "ハモリの種類",
         "harmony_up": "上ハモリ (3度上)",
@@ -37,7 +37,7 @@ translations = {
         "upload_label": "WAVファイルをアップロード",
         "start_generate": "ハモリ生成開始",
         "processing_msg": "分析合成中... (数秒〜数十秒かかります)",
-        "estimated_key": "推定されたキー",
+        "analyzed_key": "分析されたキー",
         "key_scores": "Key Estimation Scores",
         "result_label": "生成結果",
         "download_mixed": "ハモリ付き音源をダウンロード",
@@ -47,7 +47,7 @@ translations = {
     "en": {
         "analysis_error_label": "Analysis Error:",
         "title": "🎵 Auto-Harmonizer App",
-        "description": "Upload a vocal source (wav) to estimate the key and generate a harmony part.",
+        "description": "Upload a vocal source (wav) to analyze the key and generate a vocal harmony.",
         "settings_label": "Settings",
         "harmony_type_label": "Harmony Type",
         "harmony_up": "Upper Harmony (3rd Up)",
@@ -61,10 +61,10 @@ translations = {
         "fixed_segment": "Fixed-length Segmentation",
         "accurate_f0": "Accurate f0 Mode",
         "upload_label": "Upload WAV File",
-        "start_generate": "Generate Harmony",
-        "processing_msg": "Analyzing and Synthesizing... (this may take a few moments)",
-        "estimated_key": "Estimated Key",
-        "key_scores": "Key Estimation Scores",
+        "start_generate": "Generate Vocal Harmony",
+        "processing_msg": "Analyzing and Synthesizing...",
+        "analyzed_key": "Analyzed Key",
+        "key_scores": "Key Analysis Scores",
         "result_label": "Generation Results",
         "download_mixed": "Download Mixed Audio",
         "download_harmony": "Download Harmony Track Only",
@@ -286,7 +286,7 @@ if uploaded_file is not None:
             if detected_key is not None:
                 key_names_en = ["C", "Db", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"]
                 key_name = key_names_en[detected_key]
-                st.success(f"{t["estimated_key"]}: **{key_name}**")
+                st.success(f"{t["analyzed_key"]}: **{key_name}**")
 
                 # スコアグラフの表示
                 fig, ax = plt.subplots(figsize=(10, 4))
