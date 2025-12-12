@@ -68,7 +68,7 @@ translations = {
         "result_label": "Generation Results",
         "download_mixed": "Download Mixed Audio",
         "download_harmony": "Download Harmony Track Only",
-        "error_msg": "Analysis failed. The audio might not contain voice."
+        "error_msg": "Analysis failed. The audio may not contain vocal."
     }
 }
 
